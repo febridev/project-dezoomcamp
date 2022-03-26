@@ -12,8 +12,8 @@ from airflow.operators.python import PythonOperator
 # kaggle_key = os.getenv('kaggle_key')
 
 AIRFLOW_HOME = os.environ.get("AIRFLOW_HOME", "/opt/airflow/")
-csv_source = AIRFLOW_HOME+'/kaggle/artists.csv'
-# list_csv_file = os.listdir(csv_source)
+csv_source = AIRFLOW_HOME+'/kaggle'
+list_csv_file = os.listdir(csv_source)
 
 
 local_workflow = DAG(
@@ -30,14 +30,14 @@ with local_workflow:
         retries=1,
         python_callable=download_from_kaggle
     )
-    # for lfile in list_csv_file:
-    csv_to_parquet=PythonOperator(
-        task_id="convert_parquet",
-        retries=1,
-        python_callable=fhv_csv_to_parquet,
-        op_kwargs=dict(
-            srcfile = f"{csv_source}"
+    for lfile in list_csv_file:
+        csv_to_parquet=PythonOperator(
+            task_id="convert_parquet",
+            retries=1,
+            python_callable=fhv_csv_to_parquet,
+            op_kwargs=dict(
+                srcfile = f'{lfile}'
+            )
         )
-    )
 
     downloadDataset >> csv_to_parquet
