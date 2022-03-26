@@ -37,3 +37,7 @@ RUN DOWNLOAD_URL="https://dl.google.com/dl/cloudsdk/channels/rapid/downloads/goo
 WORKDIR $AIRFLOW_HOME
 
 USER $AIRFLOW_UID
+
+
+CMD "export KAGGLE_USERNAME=febridev"
+CMD "export KAGGLE_KEY=591bc2adbb0869b1c8cff89f18fe5ec0"
