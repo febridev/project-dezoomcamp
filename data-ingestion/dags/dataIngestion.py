@@ -17,7 +17,7 @@ def download_from_kaggle():
     # api.dataset_download_file(dataset, 'tracks.csv', path,unzip=True)
 
 def fhv_csv_to_parquet(srcfile):
-    list_csv_file = os.walk(srcfile)
+    list_csv_file = os.listdir(srcfile)
     for lsfile in list_csv_file:
         print(lsfile)
         # fullcsv = f'{srcfile} / {lsfile}'
