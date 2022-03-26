@@ -36,7 +36,7 @@ with local_workflow:
             retries=1,
             python_callable=fhv_csv_to_parquet,
             op_kwargs=dict(
-                srcfile = f'{lfile}'
+                srcfile = f'{csv_source}/{lfile}'
             )
         )
 
