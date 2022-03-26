@@ -20,11 +20,12 @@ def fhv_csv_to_parquet(srcfile):
     list_csv_file = os.listdir(srcfile)
     for lsfile in list_csv_file:
         fullcsv = f'{srcfile} / {lsfile}'
-        if not fullcsv.endswith('.csv'):
-            logging.error("Can only accept source files in CSV format, for the moment")
-            return
-        table = pv.read_csv(fullcsv)
-        pq.write_table(table, fullcsv.replace('.csv', '.parquet'))
+        print(fullcsv)
+        # if not fullcsv.endswith('.csv'):
+        #     logging.error("Can only accept source files in CSV format, for the moment")
+        #     return
+        # table = pv.read_csv(fullcsv)
+        # pq.write_table(table, fullcsv.replace('.csv', '.parquet'))
 
 
 
