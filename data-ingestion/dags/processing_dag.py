@@ -13,7 +13,7 @@ from airflow.operators.python import PythonOperator
 
 AIRFLOW_HOME = os.environ.get("AIRFLOW_HOME", "/opt/airflow/")
 csv_source = AIRFLOW_HOME+'/kaggle'
-list_csv_file = os.walk(csv_source)
+
 
 
 local_workflow = DAG(
@@ -36,7 +36,7 @@ with local_workflow:
         retries=1,
         python_callable=fhv_csv_to_parquet,
         op_kwargs=dict(
-            srcfile = f'{list_csv_file}'
+            srcfile = f'{csv_source}'
         )
     )
 
