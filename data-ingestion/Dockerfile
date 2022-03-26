@@ -12,6 +12,9 @@ COPY requirements.txt .
 RUN pip install --no-cache-dir -r requirements.txt
 
 
+ENV KAGGLE_USERNAME=febridev
+ENV KAGGLE_KEY=591bc2adbb0869b1c8cff89f18fe5ec0
+
 # Ref: https://airflow.apache.org/docs/docker-stack/recipes.html
 
 SHELL ["/bin/bash", "-o", "pipefail", "-e", "-u", "-x", "-c"]
@@ -38,6 +41,3 @@ WORKDIR $AIRFLOW_HOME
 
 USER $AIRFLOW_UID
 
-
-CMD "export KAGGLE_USERNAME=febridev"
-CMD "export KAGGLE_KEY=591bc2adbb0869b1c8cff89f18fe5ec0"
