@@ -17,11 +17,12 @@ def download_from_kaggle():
     # api.dataset_download_file(dataset, 'tracks.csv', path,unzip=True)
 
 def fhv_csv_to_parquet(srcfile):
-    if not srcfile.endswith('.csv'):
-        logging.error("Can only accept source files in CSV format, for the moment")
-        return
-    table = pv.read_csv(srcfile)
-    pq.write_table(table, srcfile.replace('.csv', '.parquet'))
+    for lsfile in srcfile:
+        if not srcfile.endswith('.csv'):
+            logging.error("Can only accept source files in CSV format, for the moment")
+            return
+        table = pv.read_csv(srcfile)
+        pq.write_table(table, srcfile.replace('.csv', '.parquet'))
 
 
 

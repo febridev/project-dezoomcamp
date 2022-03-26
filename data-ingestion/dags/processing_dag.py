@@ -30,14 +30,14 @@ with local_workflow:
         retries=1,
         python_callable=download_from_kaggle
     )
-    for lfile in list_csv_file:
-        csv_to_parquet=PythonOperator(
-            task_id="convert_parquet",
-            retries=1,
-            python_callable=fhv_csv_to_parquet,
-            op_kwargs=dict(
-                srcfile = f'{csv_source}/{lfile}'
-            )
+    
+    csv_to_parquet=PythonOperator(
+        task_id="convert_parquet",
+        retries=1,
+        python_callable=fhv_csv_to_parquet,
+        op_kwargs=dict(
+            srcfile = f'{list_csv_file}'
         )
+    )
 
     downloadDataset >> csv_to_parquet
