@@ -11,7 +11,8 @@ from airflow.operators.python import PythonOperator
 # kaggle_username = os.getenv('kaggle_username')
 # kaggle_key = os.getenv('kaggle_key')
 
-csv_source = "/opt/airflow/kaggle/artists.csv"
+AIRFLOW_HOME = os.environ.get("AIRFLOW_HOME", "/opt/airflow/")
+csv_source = AIRFLOW_HOME+'kaggle/artists.csv'
 list_csv_file = os.listdir(csv_source)
 
 
