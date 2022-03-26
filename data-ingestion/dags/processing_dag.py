@@ -12,8 +12,8 @@ from airflow.operators.python import PythonOperator
 # kaggle_key = os.getenv('kaggle_key')
 
 AIRFLOW_HOME = os.environ.get("AIRFLOW_HOME", "/opt/airflow/")
-csv_source = AIRFLOW_HOME+'kaggle/artists.csv'
-list_csv_file = os.listdir(csv_source)
+csv_source = AIRFLOW_HOME+'/kaggle/artists.csv'
+# list_csv_file = os.listdir(csv_source)
 
 
 local_workflow = DAG(
