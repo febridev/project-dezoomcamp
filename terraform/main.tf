@@ -83,4 +83,4 @@ resource "google_dataproc_cluster" "simplecluster" {
   }
 }
 
-gcloud dataproc clusters create project-dezoomcamp --region asia-southeast2 --zone asia-southeast2-b --single-node --master-machine-type n1-standard-2 --master-boot-disk-size 500 --image-version 2.0-debian10 --optional-components JUPYTER,DOCKER --project applied-mystery-341809
+

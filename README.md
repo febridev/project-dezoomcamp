@@ -21,6 +21,42 @@ This project produces a pipeline which:
 ## Dataset
 [Spotify Dataset](https://www.kaggle.com/yamaerenay/spotify-dataset-19212020-600k-tracks?select=tracks.csv)
 
+## Installation Terraform
+
+```shell
+# Refresh service-account's auth-token for this session
+gcloud auth application-default login
+
+# Initialize state file (.tfstate)
+terraform init
+
+# Check changes to new infra plan
+terraform plan -var="project=<your-gcp-project-id>"
+```
+
+```shell
+# Create new infra
+terraform apply -var="project=<your-gcp-project-id>"
+```
+
+```shell
+# Delete infra after your work, to avoid costs on any running services
+terraform destroy
+```
+
+## Installation Airflow
+
+```shell
+docker-compose up 
+```
+
+[Airflow WebServer](http://localhost:8080)
+
+```shell
+user: admin
+password : admin
+```
+
 
 ## Technology choices
 1. Cloud: GCP
@@ -28,7 +64,7 @@ This project produces a pipeline which:
 3. Infrastructure as code (IaC): Terraform 
 4. Workflow orchestration: Airflow 
 5. Data Warehouse: BigQuery 
-6. Transformation: Spark
+6. Transformation: Google Cloud Dataproc
 
 ## Dashboard
 1. Total number of tracks
