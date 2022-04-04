@@ -20,24 +20,11 @@ variable "storage_class" {
 variable "BQ_DATASET" {
   description = "BigQuery Dataset that raw data (from GCS) will be written to"
   type = string
-  default = "trips_data_all"
+  default = "bq_project_dezoomcamp"
 }
 
-variable "VM_AIRFLOW" {
-    description = "VM Instance For AirFlow"
-    type = string
-    default = "airflow-dezoomcamp"
-}
-
-variable "VM_MACHINE_TYPE" {
-    description = "VM Instance For AirFlow Machine Type"
-    type = string
-    default = "n1-standard-2"
-}
-
-
-variable "VM_MACHINE_ZONE" {
-    description = "VM Instance For AirFlow Machine Type"
-    type = string
-    default = "asia-southeast2-a"
+variable "DATAPROC_CLUSTERNAME" {
+  description = "DATAPROC_CLUSTERNAME"
+  type = string
+  default = "project-dezoomcamp"
 }

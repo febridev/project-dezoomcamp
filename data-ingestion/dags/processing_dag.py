@@ -1,5 +1,6 @@
 import os
 from dataIngestion import download_from_kaggle,fhv_csv_to_parquet,upload_to_gbucket
+from submitjob import submit_job,submit_job_artists,submit_job_tracks
 from datetime import datetime
 from airflow import DAG
 from airflow.operators.bash import BashOperator
@@ -31,16 +32,6 @@ with local_workflow:
         retries=1,
         python_callable=download_from_kaggle
     )
-    
-    csv_to_parquet=PythonOperator(
-        task_id="convert_parquet",
-        retries=1,
-        python_callable=fhv_csv_to_parquet,
-        op_kwargs=dict(
-            srcfile = f'{csv_source}'
-        )
-    )
-
     local_to_gcs_task = PythonOperator(
         task_id="local_to_gcs_task",
         python_callable=upload_to_gbucket,
@@ -50,4 +41,41 @@ with local_workflow:
         },
     )
 
-    downloadDataset >> csv_to_parquet >> local_to_gcs_task
+    submitjob=PythonOperator(
+        task_id="submitjob",
+        retries=1,
+        python_callable=submit_job,
+        op_kwargs=dict(
+            project_id = 'applied-mystery-341809',
+            region='asia-southeast2',
+            cluster_name='project-dezoomcamp'
+        )
+    )
+    job_dim_artists=PythonOperator(
+        task_id="job_dim_artists",
+        retries=1,
+        python_callable=submit_job_artists,
+        op_kwargs=dict(
+            project_id = PROJECT_ID,
+            region='asia-southeast2',
+            cluster_name='project-dezoomcamp',
+            appname='job_dim_artists',
+            gcs_bucket_name=BUCKET,
+            filename=f"gs://{BUCKET}/code/bq_dim_artists.py"
+        )
+    )
+
+    job_fact_tracks=PythonOperator(
+        task_id="job_fact_tracks",
+        retries=1,
+        python_callable=submit_job_tracks,
+        op_kwargs=dict(
+            project_id = PROJECT_ID,
+            region='asia-southeast2',
+            cluster_name='project-dezoomcamp',
+            appname='job_fact_tracks',
+            gcs_bucket_name=BUCKET,
+            filename=f"gs://{BUCKET}/code/bq_fact_tracks.py"
+        )
+    )
+    downloadDataset >> local_to_gcs_task >> submitjob >> job_dim_artists >> job_fact_tracks

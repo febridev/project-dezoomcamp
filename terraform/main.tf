@@ -22,28 +22,65 @@ resource "google_compute_address" "static" {
   name = "address-dezoomcamp"
 }
 
-resource "google_compute_instance" "dezoomcamp" {
-  name = var.VM_AIRFLOW
-  machine_type = var.VM_MACHINE_TYPE
-  zone = var.VM_MACHINE_ZONE
+# Data Lake Bucket
+# Ref: https://registry.terraform.io/providers/hashicorp/google/latest/docs/resources/storage_bucket
+resource "google_storage_bucket" "data-lake-bucket" {
+  name          = "${local.data_lake_bucket}_${var.project}" # Concatenating DL bucket & Project name for unique naming
+  location      = var.region
 
-  boot_disk {
-    initialize_params {
-      image = "ubuntu-os-cloud/ubuntu-minimal-2004-lts"
+  # Optional, but recommended settings:
+  storage_class = var.storage_class
+  uniform_bucket_level_access = true
+
+  versioning {
+    enabled     = true
+  }
+
+  lifecycle_rule {
+    action {
+      type = "Delete"
+    }
+    condition {
+      age = 30  // days
     }
   }
 
-  network_interface {
-    network = "default"
-    access_config {
-      nat_ip = google_compute_address.static.address
-    }
-  }
-
-
-  # service_account {
-  #   # Google recommends custom service accounts that have cloud-platform scope and permissions granted via IAM Roles.
-  #   email  = google_service_account.default.email
-  #   scopes = ["cloud-platform"]
-  # }
+  force_destroy = true
 }
+
+# DWH
+# Ref: https://registry.terraform.io/providers/hashicorp/google/latest/docs/resources/bigquery_dataset
+resource "google_bigquery_dataset" "dataset" {
+  dataset_id = var.BQ_DATASET
+  project    = var.project
+  location   = var.region
+}
+
+
+
+resource "google_dataproc_cluster" "simplecluster" {
+  name   = var.DATAPROC_CLUSTERNAME
+  region = var.region
+
+  cluster_config {
+    staging_bucket = "dataproc-staging-bucket"
+
+    master_config {
+      num_instances = 1
+      machine_type  = "e2-medium"
+      disk_config {
+        boot_disk_type    = "pd-ssd"
+        boot_disk_size_gb = 30
+      }
+    }
+
+    software_config {
+      image_version = "1.3.7-deb9"
+      override_properties = {
+        "dataproc:dataproc.allow.zero.workers" = "true"
+      }
+    }
+  }
+}
+
+gcloud dataproc clusters create project-dezoomcamp --region asia-southeast2 --zone asia-southeast2-b --single-node --master-machine-type n1-standard-2 --master-boot-disk-size 500 --image-version 2.0-debian10 --optional-components JUPYTER,DOCKER --project applied-mystery-341809
