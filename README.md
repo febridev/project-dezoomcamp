@@ -50,7 +50,8 @@ terraform destroy
 docker-compose up 
 ```
 
-[Airflow WebServer](http://localhost:8080)
+Airflow Webserver
+http://localhost:8090
 
 ```shell
 user: admin
