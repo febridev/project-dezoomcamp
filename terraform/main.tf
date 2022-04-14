@@ -18,14 +18,35 @@ provider "google" {
 #     display_name = "Service Account"
   
 # }
-resource "google_compute_address" "static" {
-  name = "address-dezoomcamp"
-}
 
 # Data Lake Bucket
 # Ref: https://registry.terraform.io/providers/hashicorp/google/latest/docs/resources/storage_bucket
 resource "google_storage_bucket" "data-lake-bucket" {
   name          = "${local.data_lake_bucket}_${var.project}" # Concatenating DL bucket & Project name for unique naming
+  location      = var.region
+
+  # Optional, but recommended settings:
+  storage_class = var.storage_class
+  uniform_bucket_level_access = true
+
+  versioning {
+    enabled     = true
+  }
+
+  lifecycle_rule {
+    action {
+      type = "Delete"
+    }
+    condition {
+      age = 30  // days
+    }
+  }
+
+  force_destroy = true
+}
+
+resource "google_storage_bucket" "data-temp-bucket" {
+  name          = "data-temp-bucket-${var.project}" # Concatenating DL bucket & Project name for unique naming
   location      = var.region
 
   # Optional, but recommended settings:
@@ -63,7 +84,7 @@ resource "google_dataproc_cluster" "simplecluster" {
   region = var.region
 
   cluster_config {
-    staging_bucket = "dataproc-staging-bucket"
+    staging_bucket = "data-temp-bucket-${var.project}"
 
     master_config {
       num_instances = 1
@@ -75,10 +96,15 @@ resource "google_dataproc_cluster" "simplecluster" {
     }
 
     software_config {
-      image_version = "1.3.7-deb9"
+      image_version = "2.0-debian10"
       override_properties = {
         "dataproc:dataproc.allow.zero.workers" = "true"
       }
+    }
+
+    gce_cluster_config {
+      # Google recommends custom service accounts that have cloud-platform scope and permissions granted via IAM Roles.
+      service_account = var.SERVICE_ACCOUNT
     }
   }
 }

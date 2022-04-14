@@ -21,27 +21,44 @@ This project produces a pipeline which:
 ## Dataset
 [Spotify Dataset](https://www.kaggle.com/yamaerenay/spotify-dataset-19212020-600k-tracks?select=tracks.csv)
 
-## Installation Terraform
+## Technology choices
+1. Cloud: GCP
+2. Datalake: GCP Bucket
+3. Infrastructure as code (IaC): Terraform 
+4. Workflow orchestration: Airflow 
+5. Data Warehouse: BigQuery 
+6. Transformation: Google Cloud Dataproc
+
+## Installation Google Cloud Infrastructure Using Terraform
 
 ```shell
 # Refresh service-account's auth-token for this session
-gcloud auth application-default login
+gcloud auth application-default login --no-launch-browser
 
 # Initialize state file (.tfstate)
 terraform init
 
 # Check changes to new infra plan
-terraform plan -var="project=<your-gcp-project-id>"
+terraform plan -var="project=<your project id>" \
+-var="region=<your region>" \
+-var="BQ_DATASET=<datsetname on bigquery>" \
+-var="DATAPROC_CLUSTERNAME=<dataproc clustername>" \
+-var="SERVICE_ACCOUNT=<service-account-from-iam>"
 ```
 
 ```shell
 # Create new infra
-terraform apply -var="project=<your-gcp-project-id>"
+terraform apply -var="project=<your project id>" \
+-var="region=<your region>" \
+-var="BQ_DATASET=<datsetname on bigquery>" \
+-var="DATAPROC_CLUSTERNAME=<dataproc clustername>" \
+-var="SERVICE_ACCOUNT=<service-account-from-iam>"
+
 ```
 
 ```shell
 # Delete infra after your work, to avoid costs on any running services
-terraform destroy
+terraform destroy -var="project=<your project id>" 
 ```
 
 ## Installation Airflow
@@ -59,13 +76,7 @@ password : admin
 ```
 
 
-## Technology choices
-1. Cloud: GCP
-2. Datalake: GCP Bucket
-3. Infrastructure as code (IaC): Terraform 
-4. Workflow orchestration: Airflow 
-5. Data Warehouse: BigQuery 
-6. Transformation: Google Cloud Dataproc
+
 
 ## Dashboard
 1. Total number of tracks

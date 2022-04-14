@@ -28,3 +28,9 @@ variable "DATAPROC_CLUSTERNAME" {
   type = string
   default = "project-dezoomcamp"
 }
+
+variable "SERVICE_ACCOUNT" {
+  description = "SERVICE ACCOUNT ID FROM IAM"
+  type = string
+  default = "dezoomcamp@applied-mystery-341809.iam.gserviceaccount.com"
+}
