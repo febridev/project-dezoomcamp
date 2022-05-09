@@ -64,6 +64,16 @@ terraform destroy -var="project=<your project id>"
 ## Installation Google Dataproc
 Because I already tried build data proc using terraform sucessfullt but when I running the pyspark job is still error. and I build google dataproc using wizard from gcp console and running the pyspark job is successfully, I recommended build the google dataproc using wizard from gcp console.
 
+1. ![dataproc_1](https://github.com/febridev/project-dezoomcamp/blob/main/screenshoot/dataproc_1.jpg)
+2. ![dataproc_2](https://github.com/febridev/project-dezoomcamp/blob/main/screenshoot/dataproc_2.jpg)
+3. ![dataproc_3](https://github.com/febridev/project-dezoomcamp/blob/main/screenshoot/dataproc_3.jpg)
+4. ![dataproc_4](https://github.com/febridev/project-dezoomcamp/blob/main/screenshoot/dataproc_4.jpg)
+5. ![dataproc_5](https://github.com/febridev/project-dezoomcamp/blob/main/screenshoot/dataproc_5.jpg)
+6. ![dataproc_6](https://github.com/febridev/project-dezoomcamp/blob/main/screenshoot/dataproc_6.jpg)
+7. ![dataproc_7](https://github.com/febridev/project-dezoomcamp/blob/main/screenshoot/dataproc_7.jpg)
+8. ![dataproc_8](https://github.com/febridev/project-dezoomcamp/blob/main/screenshoot/dataproc_8.jpg)
+9. ![dataproc_9](https://github.com/febridev/project-dezoomcamp/blob/main/screenshoot/dataproc_9.jpg)
+
 #### This is Command Line If create data proc from gcloud command 
 ```shell
 gcloud dataproc clusters create project-dezoomcamp --region asia-southeast2 --zone asia-southeast2-c --single-node --master-machine-type n1-standard-4 --master-boot-disk-size 500 --image-version 2.0-debian10 --optional-components JUPYTER,DOCKER --max-idle 604800s --project applied-mystery-341809
