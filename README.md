@@ -18,6 +18,8 @@ This project produces a pipeline which:
 5. Produce dashboard tiles in Google Data studio.
 6. This allows the analytics to view the combined tracks and artists popularity information for quick review.
 
+![dataflow](https://github.com/febridev/project-dezoomcamp/blob/main/screenshoot/flow_project_de_zoomcamp.jpg)
+
 ## Dataset
 [Spotify Dataset](https://www.kaggle.com/yamaerenay/spotify-dataset-19212020-600k-tracks?select=tracks.csv)
 
