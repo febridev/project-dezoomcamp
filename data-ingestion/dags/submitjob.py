@@ -50,14 +50,15 @@ def submit_job_artists(project_id, region, cluster_name, appname, gcs_bucket_nam
     job = {
         "placement": {"cluster_name": cluster_name},
         "pyspark_job": {
-            "main_python_file_uri":filename,
+            "main_python_file_uri": filename,
             "jar_file_uris": [
-                                "gs://dtc_data_lake_applied-mystery-341809/code/jars/gcs-connector-hadoop3-latest.jar",
-                                "gs://dtc_data_lake_applied-mystery-341809/code/jars/spark-bigquery-latest_2.12.jar"
+                                # "gs://".dtc_data_lake_applied-mystery-341809."/code/jars/gcs-connector-hadoop3-latest.jar",
+                                "gs://"+gcs_bucket_name+"/code/jars/gcs-connector-hadoop3-latest.jar",
+                                "gs://"+gcs_bucket_name+"/code/jars/spark-bigquery-latest_2.12.jar"
             ],
             "args": [
-                        "--appname=job_dim_artists",
-                        "--gcs_bucket_name=dtc_data_lake_applied-mystery-341809"
+                        "--appname="+appname,
+                        "--gcs_bucket_name="+gcs_bucket_name
             ]
         },
     }

@@ -9,9 +9,9 @@ import pyarrow.parquet as pq
 
 
 
-def download_from_kaggle():
+def download_from_kaggle(downloadpath):
     dataset = 'yamaerenay/spotify-dataset-19212020-600k-tracks'
-    path = 'kaggle'
+    path = downloadpath
     api = KaggleApi()
     api.authenticate()
     api.dataset_download_files(dataset, path,unzip=True)
@@ -48,7 +48,7 @@ def upload_to_gbucket(bucket,srcfile):
     bucket = client.bucket(bucket)
     list_parquet_file = os.listdir(srcfile)
     for lsfile in list_parquet_file:
-        if lsfile.endswith(".parquet"):
+        if lsfile.endswith(".csv"):
             fullparquet=f'{srcfile}/{lsfile}'
             bucketpath=f'raw/{lsfile}'
             # print(bucket)
