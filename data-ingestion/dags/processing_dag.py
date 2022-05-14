@@ -71,18 +71,18 @@ with local_workflow:
         )
     )
 
-    # job_fact_tracks=PythonOperator(
-    #     task_id="job_fact_tracks",
-    #     retries=1,
-    #     python_callable=submit_job_tracks,
-    #     op_kwargs=dict(
-    #         project_id = PROJECT_ID,
-    #         region='asia-southeast2',
-    #         cluster_name='project-dezoomcamp',
-    #         appname='job_fact_tracks',
-    #         gcs_bucket_name=BUCKET,
-    #         filename=f"gs://{BUCKET}/code/bq_fact_tracks.py"
-    #     )
-    # )
-    downloadDataset >> local_to_gcs_task >> job_dim_artists 
+    job_fact_tracks=PythonOperator(
+        task_id="job_fact_tracks",
+        retries=1,
+        python_callable=submit_job_tracks,
+        op_kwargs=dict(
+            project_id = PROJECT_ID,
+            region='asia-southeast2',
+            cluster_name='project-dezoomcamp',
+            appname='job_fact_tracks',
+            gcs_bucket_name=BUCKET,
+            filename=f"gs://{BUCKET}/code/bq_fact_tracks.py"
+        )
+    )
+    downloadDataset >> local_to_gcs_task >> job_dim_artists >> job_fact_tracks
     # >> job_dim_artists >> job_fact_tracks
