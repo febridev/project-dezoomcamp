@@ -56,7 +56,7 @@ def submit_job_artists(project_id, region, cluster_name, appname, gcs_bucket_nam
                                 "gs://"+gcs_bucket_name+"/code/jars/spark-bigquery-latest_2.12.jar"
             ],
             "args": [
-                        "--appname="+job_dim_artists,
+                        "--appname="+appname,
                         "--gcs_bucket_name="+gcs_bucket_name
             ]
         },
