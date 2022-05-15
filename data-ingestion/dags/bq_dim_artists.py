@@ -2,6 +2,7 @@
 # coding: utf-8
 import argparse
 import pyspark
+import pyspark.sql.functions as f
 from pyspark.sql import types
 from pyspark.sql import SparkSession
 from pyspark.conf import SparkConf
@@ -19,19 +20,34 @@ appname = args.appname
 gcs_bucket_name = args.gcs_bucket_name
 
 fullpath = f"gs://{gcs_bucket_name}/raw/artists.csv"
+cleanpath = f"gs://{gcs_bucket_name}/raw/artists_clean"
+
 spark = SparkSession.builder.appName(appname).getOrCreate()
 
 df_artists = spark.read.option("header",True).csv(fullpath)
 
-df_artists.printSchema()
+# cleansing data 
+df_artists = df_artists.select("id","followers","name","popularity")
+df_artists.write.mode('overwrite').option("header", "true").csv(cleanpath)
+
+# end cleansing
+
+# df_artists.printSchema()
+
+# schema_artists = types.StructType([
+# 	types.StructField('id',types.StringType(),True),
+# 	types.StructField('followers',types.DoubleType(),True),
+# 	types.StructField('name',types.StringType(),True)
+# ])
 
 schema_artists = types.StructType([
 	types.StructField('id',types.StringType(),True),
 	types.StructField('followers',types.DoubleType(),True),
-	types.StructField('name',types.StringType(),True)
+	types.StructField('name',types.StringType(),True),
+    types.StructField('popularity',types.IntegerType(),True)
 ])
 
-df_artists = spark.read.option("header",True).schema(schema_artists).csv(fullpath)
+df_artists = spark.read.option("header",True).schema(schema_artists).csv(cleanpath)
 df_artists = df_artists.repartition(8)
 
 gcs_bucket = gcs_bucket_name
