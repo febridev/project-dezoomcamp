@@ -163,4 +163,6 @@ override.tf.json
 .terraformrc
 terraform.rc
 
-data-ingestion/kaggle
+data-ingestion/dags/kaggle
+data-ingestion/spark/resources/jars
+.csv

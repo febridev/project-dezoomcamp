@@ -2,6 +2,7 @@
 # coding: utf-8
 import argparse
 import pyspark
+import pyspark.sql.functions as f
 from pyspark.sql import types
 from pyspark.sql import SparkSession
 from pyspark.conf import SparkConf
@@ -19,37 +20,51 @@ appname = args.appname
 gcs_bucket_name = args.gcs_bucket_name
 
 fullpath = f"gs://{gcs_bucket_name}/raw/tracks.csv"
+cleanpath = f"gs://{gcs_bucket_name}/raw/tracks_clean"
 
 spark = SparkSession.builder.appName(appname).getOrCreate()
 
 df_tracks = spark.read.option("header",True).csv(fullpath)
+# cleansing data 
+df_tracks = df_tracks.select("id",f.translate(f.col("id_artists"),"[\\[]\\'']", "").alias("id_artists"),"name","popularity","release_date")
+df_tracks.write.mode('overwrite').option("header", "true").csv(cleanpath)
+# end cleansing
+df_tracks = spark.read.option("header",True).csv(cleanpath)
 df_tracks.printSchema()
 df_tracks.schema
 
 schema = types.StructType([
 	types.StructField('id',types.StringType(),True),
+    types.StructField('id_artists',types.StringType(),True),
 	types.StructField('name',types.StringType(),True),
 	types.StructField('popularity',types.IntegerType(),True),
-	types.StructField('duration_ms',types.IntegerType(),True),
-	types.StructField('explicit',types.IntegerType(),True),
-	types.StructField('artists',types.StringType(),True),
-	types.StructField('id_artists',types.StringType(),True),
-	types.StructField('release_date',types.TimestampType(),True),
-	types.StructField('danceability',types.FloatType(),True),
-	types.StructField('energy',types.FloatType(),True),
-	types.StructField('key',types.IntegerType(),True),
-	types.StructField('loudness',types.FloatType(),True),
-	types.StructField('mode',types.IntegerType(),True),
-	types.StructField('speechiness',types.FloatType(),True),
-	types.StructField('acousticness',types.FloatType(),True),
-	types.StructField('instrumentalness',types.FloatType(),True),
-	types.StructField('liveness',types.FloatType(),True),
-	types.StructField('valence',types.FloatType(),True),
-	types.StructField('tempo',types.FloatType(),True),
-	types.StructField('time_signature',types.IntegerType(),True)
+	types.StructField('release_date',types.TimestampType(),True)
 ])
+# schema = types.StructType([
+# 	types.StructField('id',types.StringType(),True),
+# 	types.StructField('name',types.StringType(),True),
+# 	types.StructField('popularity',types.IntegerType(),True),
+# 	types.StructField('duration_ms',types.IntegerType(),True),
+# 	types.StructField('explicit',types.IntegerType(),True),
+# 	types.StructField('artists',types.StringType(),True),
+# 	types.StructField('id_artists',types.StringType(),True),
+# 	types.StructField('release_date',types.TimestampType(),True),
+# 	types.StructField('danceability',types.FloatType(),True),
+# 	types.StructField('energy',types.FloatType(),True),
+# 	types.StructField('key',types.IntegerType(),True),
+# 	types.StructField('loudness',types.FloatType(),True),
+# 	types.StructField('mode',types.IntegerType(),True),
+# 	types.StructField('speechiness',types.FloatType(),True),
+# 	types.StructField('acousticness',types.FloatType(),True),
+# 	types.StructField('instrumentalness',types.FloatType(),True),
+# 	types.StructField('liveness',types.FloatType(),True),
+# 	types.StructField('valence',types.FloatType(),True),
+# 	types.StructField('tempo',types.FloatType(),True),
+# 	types.StructField('time_signature',types.IntegerType(),True)
+# ])
 
-df_tracks = spark.read.option("header",True).schema(schema).csv(fullpath)
+df_tracks = spark.read.option("header",True).schema(schema).csv(cleanpath)
+#df_tracks.show()
 df_tracks = df_tracks.repartition(8)
 
 # Update to your GCS bucket
