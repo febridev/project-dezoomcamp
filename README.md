@@ -96,3 +96,5 @@ GCP_GCS_BUCKET=
 3. Most popular song - by popularity
 4. Most popular artist - by followers
 5. Most Tracks - Sort by Artist
+
+[View-Dashboard-On-Google-Datastudio](https://datastudio.google.com/reporting/3b420fb6-8e7e-4d0d-bbc0-355443375723)
