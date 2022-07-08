@@ -65,7 +65,7 @@ terraform destroy -var="project=<your project id>"
 ## Installation Google Dataproc
 Because I already tried build data proc using terraform sucessfullt but when I running the pyspark job is still error. and I build google dataproc using wizard from gcp console and running the pyspark job is successfully, I recommended build the google dataproc using wizard from gcp console.
 
-[dataproc-setup](https://github.com/febridev/project-dezoomcamp/setup-gcp-dataproc.md)
+[dataproc-setup](https://github.com/febridev/project-dezoomcamp/blob/main/setup-gcp-dataproc.md)
 
 
 ## Setup Airflow
